@@ -1,3 +1,11 @@
+.game{
+    display: grid;
+    grid-template-columns: 303px 1fr;
+    gap: 30px;
+    margin-top: 100px;
+    
+}
+
 .gameboard {
     display: grid;
     grid-template-columns: 100px 100px 100px;
@@ -10,8 +18,17 @@
 
 }
 
+.controls{
+    display: flex;
+    flex-direction: column;
+    width: 300px;
+    gap: 15px;
+    
+}
+
 .gridbox{
     border-style: solid;
     border-width: 3px;
     border-color: black;
+    font-size: 36px;
 }
