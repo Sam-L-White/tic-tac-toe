@@ -43,8 +43,7 @@ const displayController = (() => {
                 if (div.textContent == ""){
                     div.addEventListener("click", function clickevent(){
                         gameController.playerTurn(div.id)
-                    })
-                    
+                    })        
                 }
                 
                 
@@ -71,9 +70,15 @@ const displayController = (() => {
 
 const gameController = (function game(){
     let buttonStart = document.querySelector(".start-button")
+    let playerOne
+    let playerTwo
+    let winner_message
+    
     
     buttonStart.addEventListener("click", function startGame(){
         if (displayController.gameStarted === "No"){
+            playerOne = player(`${document.getElementById("playerOne").value}`, "X")
+            playerTwo = player(`${document.getElementById("playerTwo").value}`, "O")
             displayController.displayBoard()
             displayController.gameStarted = "Yes"
             buttonStart.textContent = "Restart"
@@ -84,6 +89,7 @@ const gameController = (function game(){
                 ["", "", ""],
                 ["", "", ""]
             ];
+            winner_message.remove()
             displayController.gameStarted = "No"
             buttonStart.textContent = "Start"
         }
@@ -94,8 +100,7 @@ const gameController = (function game(){
     
     
     
-    let playerOne = player("One","X")
-    let playerTwo = player("Two","O")
+    
     let playerOneTurn = true
     
     
@@ -124,6 +129,11 @@ const gameController = (function game(){
             ["0,0","1,1","2,2"],
             ["0,2","1,1","2,0"]
         ];
+
+        let board = document.querySelector(".gameboard")
+        let controls = document.querySelector(".controls")
+        
+        let new_board = board.cloneNode(true);
         
         winCombos.forEach(function(row){
             pos1 = row[0].split(",")
@@ -136,12 +146,24 @@ const gameController = (function game(){
 
                         case(playerOne.getMarker()):
 
-                            console.log(`${playerOne.getName()} wins!`)
+                            
+                            board.parentNode.replaceChild(new_board, board);
+                            winner_message = document.createElement("div")
+                            winner_message.classList.add("winner")
+                            winner_message.textContent = `${playerOne.getName()} wins!`
+                            controls.appendChild(winner_message)
+                            
                             break;
 
                         case(playerTwo.getMarker()):
 
-                            console.log(`${playerTwo.getName()} wins!`)
+                            
+                            
+                            board.parentNode.replaceChild(new_board, board);
+                            winner_message = document.createElement("div")
+                            winner_message.classList.add("winner")
+                            winner_message.textContent = `${playerTwo.getName()} wins!`
+                            controls.appendChild(winner_message)
                             break;
                         
                     }
