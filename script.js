@@ -102,7 +102,12 @@ const gameController = (function game(){
 
             ];
 
-            winner_message.remove()
+            if(winner_message){
+
+                winner_message.remove()
+
+            }
+
             displayController.gameStarted = "No"
             buttonStart.textContent = "Start"
         }
@@ -152,9 +157,9 @@ const gameController = (function game(){
             pos2 = row[1].split(",")
             pos3 = row[2].split(",")
 
-            if(gameBoard.boardArray[pos1[0]][pos1[1]] === gameBoard.boardArray[pos2[0]][pos2[1]]){
+            if(gameBoard.boardArray[pos1[0]][pos1[1]] === gameBoard.boardArray[pos2[0]][pos2[1]] && gameBoard.boardArray[pos2[0]][pos2[1]] === gameBoard.boardArray[pos3[0]][pos3[1]]){
 
-                if(gameBoard.boardArray[pos2[0]][pos2[1]] === gameBoard.boardArray[pos3[0]][pos3[1]]){
+                
 
                     switch(gameBoard.boardArray[pos3[0]][pos3[1]]){
 
@@ -176,7 +181,7 @@ const gameController = (function game(){
                             controls.appendChild(winner_message)
                             break;
                     }
-                }
+            
             }
         })
     };
