@@ -78,9 +78,12 @@ const gameController = (function game(){
     let buttonStart = document.querySelector(".start-button")
     let playerOne
     let playerTwo
-    let winner_message
+    let winnerMessage
+    let turnCounter
 
     buttonStart.addEventListener("click", function startGame(){
+
+        turnCounter = 0
 
         if (displayController.gameStarted === "No"){
 
@@ -102,10 +105,15 @@ const gameController = (function game(){
 
             ];
 
-            if(winner_message){
+            if(winnerMessage){
 
-                winner_message.remove()
+                winnerMessage.remove()
+                winnerMessage = null
 
+            } else if(tieMessage){
+
+                tieMessage.remove()
+                tieMessage = null
             }
 
             displayController.gameStarted = "No"
@@ -121,13 +129,17 @@ const gameController = (function game(){
         if (playerOneTurn == true){
 
             playerOne.placeMarker(div_id)
+            turnCounter++
             playerOneTurn = false
 
         } else {
 
             playerTwo.placeMarker(div_id)
+            turnCounter++
             playerOneTurn = true
         }
+
+        console.log(turnCounter)
     }
 
     const checkBoard = () => {
@@ -159,31 +171,37 @@ const gameController = (function game(){
 
             if(gameBoard.boardArray[pos1[0]][pos1[1]] === gameBoard.boardArray[pos2[0]][pos2[1]] && gameBoard.boardArray[pos2[0]][pos2[1]] === gameBoard.boardArray[pos3[0]][pos3[1]]){
 
-                
+                switch(gameBoard.boardArray[pos3[0]][pos3[1]]){
 
-                    switch(gameBoard.boardArray[pos3[0]][pos3[1]]){
+                    case(playerOne.getMarker()):
 
-                        case(playerOne.getMarker()):
+                        board.parentNode.replaceChild(new_board, board);
+                        winnerMessage = document.createElement("div")
+                        winnerMessage.classList.add("winner")
+                        winnerMessage.textContent = `${playerOne.getName()} wins!`
+                        controls.appendChild(winnerMessage)
+                        break;
 
-                            board.parentNode.replaceChild(new_board, board);
-                            winner_message = document.createElement("div")
-                            winner_message.classList.add("winner")
-                            winner_message.textContent = `${playerOne.getName()} wins!`
-                            controls.appendChild(winner_message)
-                            break;
+                    case(playerTwo.getMarker()):
 
-                        case(playerTwo.getMarker()):
-
-                            board.parentNode.replaceChild(new_board, board);
-                            winner_message = document.createElement("div")
-                            winner_message.classList.add("winner")
-                            winner_message.textContent = `${playerTwo.getName()} wins!`
-                            controls.appendChild(winner_message)
-                            break;
-                    }
-            
+                        board.parentNode.replaceChild(new_board, board);
+                        winnerMessage = document.createElement("div")
+                        winnerMessage.classList.add("winner")
+                        winnerMessage.textContent = `${playerTwo.getName()} wins!`
+                        controls.appendChild(winnerMessage)
+                        break;
+                }
             }
         })
+
+        if(turnCounter === 8 && !winnerMessage){
+
+            board.parentNode.replaceChild(new_board, board);
+            tieMessage = document.createElement("div")
+            tieMessage.classList.add("tie")
+            tieMessage.textContent = `It's a tie!`
+            controls.appendChild(tieMessage)
+        }
     };
 
     return {playerTurn, checkBoard}
